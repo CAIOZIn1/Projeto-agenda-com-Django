@@ -1,5 +1,19 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
+<h1>
+    Dashboard
+</h1>
 
+{% include 'parciais/_messages.html' %}
+
+<div>
+    <h2>
+        Olá {{ user.first_name }} {{ user.last_name }}
+    </h2>
+
+    <p>
+        O seu nome de usuário é {{ user }}.
+    </p>
+</div>
 {% endblock %}

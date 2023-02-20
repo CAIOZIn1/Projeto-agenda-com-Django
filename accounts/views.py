@@ -1,15 +1,31 @@
-from django.contrib import messages
+from django.contrib import auth, messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.shortcuts import redirect, render
 
 
 def login(request):
-    return render(request, 'accounts/login.html')
+    if request.method != 'POST':
+        return render(request, 'accounts/login.html')
+
+    usuario = request.POST.get('usuario')
+    senha = request.POST.get('senha')
+
+    user = auth.authenticate(request, username=usuario, password=senha)
+
+    if not user:
+        messages.error(
+            request, 'Ocorreu um erro de login, confira seu usuario e senha novamente.')
+        return render(request, 'accounts/login.html')
+    else:
+        messages.success(request, 'O login foi realizado corretamente!')
+        return redirect('dashboard')
 
 
 def logout(request):
-    return render(request, 'accounts/logout.html')
+    auth.logout(request)
+    return redirect('dashboard')
 
 
 def cadastro(request):
@@ -60,5 +76,6 @@ def cadastro(request):
     return redirect('login')
 
 
+@login_required(redirect_field_name='login')
 def dashboard(request):
     return render(request, 'accounts/dashboard.html')
