@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.shortcuts import redirect, render
 
+from .models import FormContato
+
 
 def login(request):
     if request.method != 'POST':
@@ -25,7 +27,7 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect('dashboard')
+    return redirect('login')
 
 
 def cadastro(request):
@@ -78,4 +80,25 @@ def cadastro(request):
 
 @login_required(redirect_field_name='login')
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    if request.method != 'POST':
+        form = FormContato()
+        return render(request, 'accounts/dashboard.html', {'form': form})
+
+    form = FormContato(request.POST, request.FILES)
+
+    if not form.is_valid():
+        messages.error(request, 'Ocorreu um erro no formulário.')
+        form = FormContato(request.POST)
+        return render(request, 'accounts/dashboard.html', {'form': form})
+
+    descricao = request.POST.get('descricao')
+
+    if len(descricao) < 5:
+        messages.error(request, 'Descrição precisa ter mais que 5 caracteres.')
+        form = FormContato(request.POST)
+        return render(request, 'accounts/dashboard.html', {'form': form})
+
+    form.save()
+    messages.success(
+        request, f'Contato {request.POST.get("nome")} adicionado com sucesso!')
+    return redirect('dashboard')
