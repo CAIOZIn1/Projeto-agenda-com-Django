@@ -10,19 +10,19 @@
     {% csrf_token %}
     <div class="form-group">
       <label>Nome</label>
-      <input type="text" name="nome" class="form-control" placeholder="Name">
+      <input type="text" name="nome" value="{{ request.POST.nome }}" class="form-control" placeholder="Name">
     </div>
     <div class="form-group">
       <label>Sobrenome</label>
-      <input type="text" name="sobrenome" class="form-control" placeholder="Last name">
+      <input type="text" name="sobrenome" value="{{ request.POST.sobrenome }}" class="form-control"  placeholder="Last name">
     </div>
     <div class="form-group">
       <label>Email</label>
-      <input type="email" name="email" class="form-control" placeholder="Email adress">
+      <input required type="email" name="email" value="{{ request.POST.email }}" class="form-control" placeholder="Email adress">
     </div>
     <div class="form-group">
       <label>Usuário</label>
-      <input type="text" name="usuario" class="form-control" placeholder="User">
+      <input type="text" name="usuario" value="{{ request.POST.usuario }}" class="form-control" placeholder="User">
     </div>
     <div class="form-group">
       <label>Senha</label>
@@ -30,7 +30,7 @@
     </div>
     <div class="form-group">
       <label>Repetir senha</label>
-      <input type="password" name="repetir-senha" class="form-control" placeholder="Password again">
+      <input type="password" name="repetir_senha" class="form-control" placeholder="Password again">
     </div>
     <button type="submit" class="btn btn-primary">Cadastrar</button>
   </form>
